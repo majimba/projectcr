@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import TopBar from '../components/layout/TopBar';
 import StatusBadge from '../components/ui/StatusBadge';
+import PhaseStatusBadge from '../components/ui/PhaseStatusBadge';
 import ProgressBar from '../components/ui/ProgressBar';
 import { ProjectPhase, Deliverable } from '@/types/database';
 
@@ -93,7 +94,7 @@ export default function TimelinePage() {
                       <div className="flex-1 pb-8">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-white">{phase.name}</h3>
-                          <StatusBadge status={phase.status} />
+                          <PhaseStatusBadge status={phase.status} />
                         </div>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
                           {phase.description}

@@ -5,9 +5,10 @@ import { UpdateDeliverable } from '@/types/database'
 // GET /api/deliverables/[id] - Fetch a specific deliverable
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createClient()
     
     // Get current user
@@ -37,7 +38,7 @@ export async function GET(
           changed_by:profiles!deliverable_history_changed_by_fkey(full_name)
         )
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error) {
@@ -59,9 +60,10 @@ export async function GET(
 // PUT /api/deliverables/[id] - Update a specific deliverable
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createClient()
     
     // Get current user
@@ -89,14 +91,14 @@ export async function PUT(
     const { data: currentDeliverable } = await supabase
       .from('deliverables')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     // Update the deliverable
     const { data, error } = await supabase
       .from('deliverables')
       .update(updateData)
-      .eq('id', params.id)
+      .eq('id', id)
       .select(`
         *,
         assignee:profiles!deliverables_assignee_id_fkey(full_name, avatar_url)
@@ -118,7 +120,7 @@ export async function PUT(
     if (currentDeliverable) {
       if (currentDeliverable.status !== updateData.status) {
         historyEntries.push({
-          deliverable_id: params.id,
+          deliverable_id: id,
           action: 'Status updated to',
           old_value: currentDeliverable.status,
           new_value: updateData.status,
@@ -128,7 +130,7 @@ export async function PUT(
       
       if (currentDeliverable.assignee_id !== updateData.assignee_id) {
         historyEntries.push({
-          deliverable_id: params.id,
+          deliverable_id: id,
           action: 'Assignee changed to',
           old_value: currentDeliverable.assignee_name,
           new_value: updateData.assignee_name,
@@ -153,9 +155,10 @@ export async function PUT(
 // DELETE /api/deliverables/[id] - Delete a specific deliverable
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createClient()
     
     // Get current user
@@ -168,7 +171,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('deliverables')
       .delete()
-      .eq('id', params.id)
+      .eq('id', id)
 
     if (error) {
       console.error('Error deleting deliverable:', error)
