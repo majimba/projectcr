@@ -326,7 +326,17 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
                       label="Status" 
                       options={statusOptions}
                       value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      onChange={(e) => {
+                        const newStatus = e.target.value;
+                        const updates: Partial<typeof formData> = { status: newStatus };
+                        
+                        // Auto-update progress to 100% when status is set to "done"
+                        if (newStatus === 'done') {
+                          updates.progress = 100;
+                        }
+                        
+                        setFormData({...formData, ...updates});
+                      }}
                     />
 
                     <Select 
@@ -378,12 +388,45 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
                         min="0"
                         max="100"
                         value={formData.progress}
-                        onChange={(e) => setFormData({...formData, progress: parseInt(e.target.value)})}
+                        onChange={(e) => {
+                          const newProgress = parseInt(e.target.value);
+                          const updates: Partial<typeof formData> = { progress: newProgress };
+                          
+                          // Suggest updating status to "done" when progress reaches 100%
+                          if (newProgress === 100 && formData.status !== 'done') {
+                            // Optional: Auto-update status to "done" when progress reaches 100%
+                            // Uncomment the line below if you want automatic status update
+                            // updates.status = 'done';
+                          }
+                          
+                          setFormData({...formData, ...updates});
+                        }}
                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                       />
                       <div className="mt-2">
                         <ProgressBar progress={formData.progress} />
                       </div>
+                      
+                      {/* Progress completion suggestion */}
+                      {formData.progress === 100 && formData.status !== 'done' && (
+                        <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-sm text-yellow-700 dark:text-yellow-300">
+                              Progress is 100%. Consider updating status to &quot;Done&quot;.
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setFormData({...formData, status: 'done'})}
+                              className="ml-auto text-xs bg-yellow-600 text-white px-2 py-1 rounded hover:bg-yellow-700 transition-colors"
+                            >
+                              Mark as Done
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
