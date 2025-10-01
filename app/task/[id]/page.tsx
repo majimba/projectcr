@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState, useEffect } from 'react';
+import { use, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '../../components/layout/Sidebar';
 import TopBar from '../../components/layout/TopBar';
@@ -11,6 +11,19 @@ import StatusBadge from '../../components/ui/StatusBadge';
 import ProgressBar from '../../components/ui/ProgressBar';
 import { Deliverable } from '@/types/database';
 
+interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  tasks: string;
+  avatar_url: string | null;
+  bio: string;
+  phone: string;
+  is_active: boolean;
+  joined_at: string;
+}
+
 export default function TaskDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
@@ -18,6 +31,7 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [historyLog, setHistoryLog] = useState([
     {
       id: 1,
@@ -58,14 +72,28 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
     { value: 'done', label: 'Done' },
   ];
 
+  // Fetch team members from API
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      const response = await fetch('/api/team-members');
+      if (response.ok) {
+        const members = await response.json();
+        setTeamMembers(members);
+      } else {
+        console.error('Failed to fetch team members');
+      }
+    } catch (error) {
+      console.error('Error fetching team members:', error);
+    }
+  }, []);
+
+  // Generate assignee options from team members
   const assigneeOptions = [
     { value: '', label: 'Unassigned' },
-    { value: 'Chawana Maseka', label: 'Chawana Maseka' },
-    { value: 'Alice Johnson', label: 'Alice Johnson' },
-    { value: 'Bob Williams', label: 'Bob Williams' },
-    { value: 'Charlie Brown', label: 'Charlie Brown' },
-    { value: 'David Lee', label: 'David Lee' },
-    { value: 'Eva Wilson', label: 'Eva Wilson' },
+    ...teamMembers.map(member => ({
+      value: member.name,
+      label: member.name
+    }))
   ];
 
   const projectAreaOptions = [
@@ -136,6 +164,11 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
 
     fetchTask();
   }, [id]);
+
+  // Fetch team members when component loads
+  useEffect(() => {
+    fetchTeamMembers();
+  }, [fetchTeamMembers]);
 
   const handleEdit = () => {
     setIsEditing(true);

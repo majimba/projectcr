@@ -20,6 +20,8 @@
 - Automatic progress synchronization
 - Smart UI suggestions
 - One-click status updates
+- Auto-fix for existing completed tasks with incorrect progress
+- Database consistency enforcement
 - Improved user experience
 
 ---

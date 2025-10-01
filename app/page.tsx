@@ -7,6 +7,7 @@ import TopBar from './components/layout/TopBar';
 import KpiCard from './components/ui/KpiCard';
 import StatusBadge from './components/ui/StatusBadge';
 import ProgressBar from './components/ui/ProgressBar';
+import InlineAssignee from './components/ui/InlineAssignee';
 import { Deliverable } from '@/types/database';
 
 export default function Dashboard() {
@@ -15,6 +16,63 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [isDeliverablesExpanded, setIsDeliverablesExpanded] = useState(false);
+  
+  // Filter states
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    status: 'all',
+    week: 'all',
+    projectArea: 'all',
+    assignee: 'all'
+  });
+  const [teamMembers, setTeamMembers] = useState<Array<{id: string, name: string, role: string}>>([]);
+
+  // Handle assignee changes
+  const handleAssigneeChange = (taskId: string, newAssignee: string) => {
+    setDeliverables(prev => 
+      prev.map(deliverable => 
+        deliverable.id === taskId 
+          ? { ...deliverable, assignee_name: newAssignee }
+          : deliverable
+      )
+    );
+  };
+
+  // Fetch team members for assignee filter
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      const response = await fetch('/api/team-members');
+      if (response.ok) {
+        const members = await response.json();
+        setTeamMembers(members);
+      }
+    } catch (error) {
+      console.error('Error fetching team members:', error);
+    }
+  }, []);
+
+  // Filter change handlers
+  const handleFilterChange = (filterType: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+    setShowFilters(false); // Close dropdown after selection
+  };
+
+  const clearAllFilters = () => {
+    setFilters({
+      status: 'all',
+      week: 'all',
+      projectArea: 'all',
+      assignee: 'all'
+    });
+    setShowFilters(false); // Close dropdown after clearing
+  };
+
+  const getActiveFiltersCount = () => {
+    return Object.values(filters).filter(value => value !== 'all').length;
+  };
 
   const fetchDeliverables = useCallback(async () => {
     try {
@@ -49,17 +107,65 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchDeliverables();
-  }, [fetchDeliverables]);
+    fetchTeamMembers();
+  }, [fetchDeliverables, fetchTeamMembers]);
+
+  // Close filter dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const filterButton = document.querySelector('[data-filter-button]');
+      const filterDropdown = document.querySelector('[data-filter-dropdown]');
+      
+      if (filterButton && filterDropdown && 
+          !filterButton.contains(event.target as Node) && 
+          !filterDropdown.contains(event.target as Node)) {
+        setShowFilters(false);
+      }
+    };
+
+    if (showFilters) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showFilters]);
 
   // Calculate KPIs from real data
   const totalDeliverables = deliverables.length;
   const completedDeliverables = deliverables.filter(d => d.status === 'done').length;
   const inProgressDeliverables = deliverables.filter(d => d.status === 'in-progress').length;
 
-  // Filter deliverables by selected week
-  const filteredDeliverables = selectedWeek 
-    ? deliverables.filter(d => d.week_number === selectedWeek)
-    : deliverables;
+  // Filter deliverables by all active filters
+  const filteredDeliverables = deliverables.filter(deliverable => {
+    // Status filter
+    if (filters.status !== 'all' && deliverable.status !== filters.status) {
+      return false;
+    }
+    
+    // Week filter
+    if (filters.week !== 'all' && deliverable.week_number !== parseInt(filters.week)) {
+      return false;
+    }
+    
+    // Project area filter
+    if (filters.projectArea !== 'all' && deliverable.project_area !== filters.projectArea) {
+      return false;
+    }
+    
+    // Assignee filter
+    if (filters.assignee !== 'all') {
+      if (filters.assignee === 'unassigned' && deliverable.assignee_name) {
+        return false;
+      }
+      if (filters.assignee !== 'unassigned' && deliverable.assignee_name !== filters.assignee) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
+
 
   // Get deliverables count for each week
   const getWeekDeliverablesCount = (weekNumber: number) => {
@@ -87,7 +193,7 @@ export default function Dashboard() {
     );
   }
 
-  // Fallback mock data if no real data - matches database schema
+  // Fallback mock data if no real data - matches database schema and real team members
   const mockDeliverables: Deliverable[] = [
     {
       id: "1",
@@ -95,7 +201,7 @@ export default function Dashboard() {
       description: "Complete redesign of the company website with modern UI/UX",
       status: "done" as const,
       assignee_id: "user-1",
-      assignee_name: "Alice Johnson",
+      assignee_name: "Chawana Masaka",
       project_area: "Branding & Identity",
       due_date: "2025-03-15",
       week_number: 1,
@@ -111,7 +217,7 @@ export default function Dashboard() {
       description: "Develop mobile application for iOS and Android platforms",
       status: "in-progress" as const,
       assignee_id: "user-2",
-      assignee_name: "Bob Williams",
+      assignee_name: "Maynard Muchangwe",
       project_area: "Operations & Systems",
       due_date: "2025-04-20",
       week_number: 2,
@@ -127,7 +233,7 @@ export default function Dashboard() {
       description: "Launch comprehensive marketing campaign across all channels",
       status: "in-review" as const,
       assignee_id: "user-3",
-      assignee_name: "Charlie Brown",
+      assignee_name: "Chawana Masaka",
       project_area: "Social Media & Marketing",
       due_date: "2025-05-10",
       week_number: 3,
@@ -143,7 +249,7 @@ export default function Dashboard() {
       description: "Train customer support team on new processes and tools",
       status: "to-do" as const,
       assignee_id: "user-4",
-      assignee_name: "Diana Miller",
+      assignee_name: "",
       project_area: "HR & People",
       due_date: "2025-06-01",
       week_number: 4,
@@ -159,7 +265,7 @@ export default function Dashboard() {
       description: "Update all product documentation with latest features",
       status: "done" as const,
       assignee_id: "user-5",
-      assignee_name: "Eva Wilson",
+      assignee_name: "Maynard Muchangwe",
       project_area: "Operations & Systems",
       due_date: "2025-02-28",
       week_number: 1,
@@ -324,12 +430,117 @@ export default function Dashboard() {
                             type="text"
                           />
                         </div>
-                        <button className="flex items-center gap-2 rounded-md border border-gray-200 dark:border-gray-700/50 bg-white dark:bg-gray-800/50 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/80">
-                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                          </svg>
-                          <span>Filters</span>
-                        </button>
+                        <div className="relative">
+                          <button 
+                            data-filter-button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="flex items-center gap-2 rounded-md border border-gray-200 dark:border-gray-700/50 bg-white dark:bg-gray-800/50 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/80"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            <span>Filters</span>
+                            {getActiveFiltersCount() > 0 && (
+                              <span className="bg-blue-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] text-center">
+                                {getActiveFiltersCount()}
+                              </span>
+                            )}
+                          </button>
+                          
+                          {showFilters && (
+                            <div data-filter-dropdown className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 p-4">
+                              <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filter Deliverables</h3>
+                                  <button
+                                    onClick={clearAllFilters}
+                                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                                  >
+                                    Clear All
+                                  </button>
+                                </div>
+                                
+                                {/* Status Filter */}
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Status
+                                  </label>
+                                  <select
+                                    value={filters.status}
+                                    onChange={(e) => handleFilterChange('status', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  >
+                                    <option value="all">All Status</option>
+                                    <option value="not-started">Not Started</option>
+                                    <option value="to-do">To Do</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="in-review">In Review</option>
+                                    <option value="done">Done</option>
+                                  </select>
+                                </div>
+                                
+                                {/* Week Filter */}
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Week
+                                  </label>
+                                  <select
+                                    value={filters.week}
+                                    onChange={(e) => handleFilterChange('week', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  >
+                                    <option value="all">All Weeks</option>
+                                    <option value="1">Week 1</option>
+                                    <option value="2">Week 2</option>
+                                    <option value="3">Week 3</option>
+                                    <option value="4">Week 4</option>
+                                  </select>
+                                </div>
+                                
+                                {/* Project Area Filter */}
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Project Area
+                                  </label>
+                                  <select
+                                    value={filters.projectArea}
+                                    onChange={(e) => handleFilterChange('projectArea', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  >
+                                    <option value="all">All Areas</option>
+                                    <option value="Strategy Layer">Strategy Layer</option>
+                                    <option value="Branding & Identity">Branding & Identity</option>
+                                    <option value="Social Media & Marketing">Social Media & Marketing</option>
+                                    <option value="HR & People">HR & People</option>
+                                    <option value="Finance & Administration">Finance & Administration</option>
+                                    <option value="Operations & Systems">Operations & Systems</option>
+                                    <option value="Client-Facing Readiness">Client-Facing Readiness</option>
+                                  </select>
+                                </div>
+                                
+                                {/* Assignee Filter */}
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Assignee
+                                  </label>
+                                  <select
+                                    value={filters.assignee}
+                                    onChange={(e) => handleFilterChange('assignee', e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  >
+                                    <option value="all">All Assignees</option>
+                                    <option value="unassigned">Unassigned</option>
+                                    {teamMembers.map((member) => (
+                                      <option key={member.id} value={member.name}>
+                                        {member.name} ({member.role})
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -345,17 +556,27 @@ export default function Dashboard() {
                           </tr>
                         </thead>
                         <tbody className="bg-white dark:bg-[#101922] divide-y divide-gray-200 dark:divide-gray-700/50">
-                          {displayDeliverables.map((item) => (
+                          {filteredDeliverables.map((item) => (
                             <tr 
                               key={item.id}
-                              className="hover:bg-gray-50 dark:hover:bg-gray-800/20 cursor-pointer transition-colors"
-                              onClick={() => {
-                                console.log('Clicked on deliverable from dashboard:', item.id, item.title);
-                                router.push(`/task/${item.id}`);
-                              }}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-800/20 transition-colors"
                             >
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{item.title}</td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{item.assignee_name || 'Unassigned'}</td>
+                              <td 
+                                className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
+                                onClick={() => {
+                                  console.log('Clicked on deliverable title from dashboard:', item.id, item.title);
+                                  router.push(`/task/${item.id}`);
+                                }}
+                              >
+                                {item.title}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                <InlineAssignee
+                                  currentAssignee={item.assignee_name || ''}
+                                  taskId={item.id}
+                                  onAssigneeChange={handleAssigneeChange}
+                                />
+                              </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 <StatusBadge status={item.status} />
                               </td>

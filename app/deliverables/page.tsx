@@ -8,6 +8,7 @@ import TopBar from '../components/layout/TopBar';
 import StatusBadge from '../components/ui/StatusBadge';
 import Button from '../components/ui/Button';
 import ProgressBar from '../components/ui/ProgressBar';
+import InlineAssignee from '../components/ui/InlineAssignee';
 import { Deliverable } from '@/types/database';
 
 export default function DeliverablesPage() {
@@ -17,6 +18,17 @@ export default function DeliverablesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterWeek, setFilterWeek] = useState('all');
+
+  // Handle assignee changes
+  const handleAssigneeChange = (taskId: string, newAssignee: string) => {
+    setDeliverables(prev => 
+      prev.map(deliverable => 
+        deliverable.id === taskId 
+          ? { ...deliverable, assignee_name: newAssignee }
+          : deliverable
+      )
+    );
+  };
 
   useEffect(() => {
     const fetchDeliverables = async () => {
@@ -198,14 +210,12 @@ export default function DeliverablesPage() {
                             </div>
                           )}
                         </td>
-                        <td 
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 cursor-pointer"
-                          onClick={() => {
-                            console.log('Clicked on deliverable:', item.id, item.title);
-                            router.push(`/task/${item.id}`);
-                          }}
-                        >
-                          {item.assignee_name || 'Unassigned'}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          <InlineAssignee
+                            currentAssignee={item.assignee_name || ''}
+                            taskId={item.id}
+                            onAssigneeChange={handleAssigneeChange}
+                          />
                         </td>
                         <td 
                           className="px-6 py-4 whitespace-nowrap text-sm cursor-pointer"
