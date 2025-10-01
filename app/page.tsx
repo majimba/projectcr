@@ -8,6 +8,7 @@ import KpiCard from './components/ui/KpiCard';
 import StatusBadge from './components/ui/StatusBadge';
 import ProgressBar from './components/ui/ProgressBar';
 import InlineAssignee from './components/ui/InlineAssignee';
+import ProjectProgressStatusBar from './components/ProjectProgressStatusBar';
 import { Deliverable } from '@/types/database';
 
 export default function Dashboard() {
@@ -301,6 +302,9 @@ export default function Dashboard() {
                 <KpiCard label="Deliverables Completed" value={completedDeliverables} />
                 <KpiCard label="Deliverables In Progress" value={inProgressDeliverables} />
               </div>
+
+              {/* Project Progress Status Bar */}
+              <ProjectProgressStatusBar deliverables={displayDeliverables} />
 
               {/* Week Tiles */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
