@@ -1,5 +1,29 @@
 # Project CR Dashboard - Changelog
 
+## Version 1.1.1 - Progress Auto-Update Enhancement
+*Released: January 2025*
+
+### 🎯 New Feature: Smart Status/Progress Synchronization
+
+#### Progress Auto-Update When Status Changes to "Done"
+**Problem**: When users changed task status to "done", progress field didn't automatically update to 100%
+
+**Solution**: 
+- Auto-update progress to 100% when status is set to "done"
+- Add visual suggestion when progress reaches 100% but status isn't "done"
+- Provide one-click "Mark as Done" button for convenience
+
+**Files Modified**:
+- `app/task/[id]/page.tsx`
+
+**Features Added**:
+- Automatic progress synchronization
+- Smart UI suggestions
+- One-click status updates
+- Improved user experience
+
+---
+
 ## Version 1.1.0 - Critical Bug Fixes & Performance Improvements
 *Released: January 2025*
 

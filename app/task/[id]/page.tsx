@@ -92,6 +92,10 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
         if (response.ok) {
           const taskData = await response.json();
           setTask(taskData);
+          // Auto-set progress to 100% if status is "done" and progress is not already 100%
+          const shouldAutoSetProgress = taskData.status === 'done' && (taskData.progress || 0) < 100;
+          const progressValue = shouldAutoSetProgress ? 100 : (taskData.progress || 0);
+          
           setFormData({
             title: taskData.title || '',
             description: taskData.description || '',
@@ -100,9 +104,28 @@ export default function TaskDetailsPage({ params }: { params: Promise<{ id: stri
             project_area: taskData.project_area || '',
             due_date: taskData.due_date ? taskData.due_date.split('T')[0] : '',
             week_number: taskData.week_number || 1,
-            progress: taskData.progress || 0,
+            progress: progressValue,
             document_link: taskData.document_link || ''
           });
+
+          // Auto-save progress update to database if needed
+          if (shouldAutoSetProgress) {
+            try {
+              await fetch(`/api/deliverables/${id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  ...taskData,
+                  progress: 100
+                }),
+              });
+              console.log('Progress automatically updated to 100% for completed task');
+            } catch (error) {
+              console.error('Error auto-updating progress:', error);
+            }
+          }
         }
       } catch (error) {
         console.error('Error fetching task:', error);
