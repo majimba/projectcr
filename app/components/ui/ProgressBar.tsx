@@ -1,10 +1,12 @@
+import React from 'react';
+
 interface ProgressBarProps {
   progress: number;
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
 }
 
-export default function ProgressBar({ progress, showLabel = true, size = 'md' }: ProgressBarProps) {
+const ProgressBar = React.memo(function ProgressBar({ progress, showLabel = true, size = 'md' }: ProgressBarProps) {
   const sizeStyles = {
     sm: 'h-1',
     md: 'h-2',
@@ -26,4 +28,6 @@ export default function ProgressBar({ progress, showLabel = true, size = 'md' }:
       )}
     </div>
   );
-}
+});
+
+export default ProgressBar;

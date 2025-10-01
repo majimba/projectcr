@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Sidebar from './components/layout/Sidebar';
 import TopBar from './components/layout/TopBar';
@@ -16,40 +16,40 @@ export default function Dashboard() {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [isDeliverablesExpanded, setIsDeliverablesExpanded] = useState(false);
 
-  useEffect(() => {
-    const fetchDeliverables = async () => {
-      try {
-        const response = await fetch('/api/deliverables');
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Fetched deliverables:', data);
-          setDeliverables(data);
-        } else if (response.status === 401) {
-          console.log('User not authenticated, using mock data');
-          // User not authenticated, use mock data
-          setDeliverables([]);
-        } else {
-          console.error('Failed to fetch deliverables:', response.status, response.statusText);
-          // Try to get error message
-          try {
-            const errorData = await response.json();
-            console.error('Error details:', errorData);
-          } catch (e) {
-            console.error('Could not parse error response');
-          }
-          setDeliverables([]);
-        }
-      } catch (error) {
-        console.error('Error fetching deliverables:', error);
+  const fetchDeliverables = useCallback(async () => {
+    try {
+      const response = await fetch('/api/deliverables');
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Fetched deliverables:', data);
+        setDeliverables(data);
+      } else if (response.status === 401) {
+        console.log('User not authenticated, using mock data');
+        // User not authenticated, use mock data
         setDeliverables([]);
-      } finally {
-        setLoading(false);
+      } else {
+        console.error('Failed to fetch deliverables:', response.status, response.statusText);
+        // Try to get error message
+        try {
+          const errorData = await response.json();
+          console.error('Error details:', errorData);
+        } catch (e) {
+          console.error('Could not parse error response');
+        }
+        setDeliverables([]);
       }
-    };
-
-    fetchDeliverables();
+    } catch (error) {
+      console.error('Error fetching deliverables:', error);
+      setDeliverables([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchDeliverables();
+  }, [fetchDeliverables]);
 
   // Calculate KPIs from real data
   const totalDeliverables = deliverables.length;
@@ -87,47 +87,87 @@ export default function Dashboard() {
     );
   }
 
-  // Fallback mock data if no real data
-  const mockDeliverables = [
+  // Fallback mock data if no real data - matches database schema
+  const mockDeliverables: Deliverable[] = [
     {
-      id: 1,
+      id: "1",
       title: "Website Redesign",
-      assignee: "Alice Johnson",
-      status: "Done" as const,
+      description: "Complete redesign of the company website with modern UI/UX",
+      status: "done" as const,
+      assignee_id: "user-1",
+      assignee_name: "Alice Johnson",
+      project_area: "Branding & Identity",
+      due_date: "2025-03-15",
+      week_number: 1,
+      document_link: null,
       progress: 100,
-      dueDate: "2025-03-15"
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-15T00:00:00Z",
+      created_by: "user-1"
     },
     {
-      id: 2,
+      id: "2",
       title: "Mobile App Development",
-      assignee: "Bob Williams",
-      status: "In Progress" as const,
+      description: "Develop mobile application for iOS and Android platforms",
+      status: "in-progress" as const,
+      assignee_id: "user-2",
+      assignee_name: "Bob Williams",
+      project_area: "Operations & Systems",
+      due_date: "2025-04-20",
+      week_number: 2,
+      document_link: null,
       progress: 60,
-      dueDate: "2025-04-20"
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-15T00:00:00Z",
+      created_by: "user-1"
     },
     {
-      id: 3,
+      id: "3",
       title: "Marketing Campaign Launch",
-      assignee: "Charlie Brown",
-      status: "In Review" as const,
+      description: "Launch comprehensive marketing campaign across all channels",
+      status: "in-review" as const,
+      assignee_id: "user-3",
+      assignee_name: "Charlie Brown",
+      project_area: "Social Media & Marketing",
+      due_date: "2025-05-10",
+      week_number: 3,
+      document_link: null,
       progress: 90,
-      dueDate: "2025-05-10"
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-15T00:00:00Z",
+      created_by: "user-1"
     },
     {
-      id: 4,
+      id: "4",
       title: "Customer Support Training",
-      assignee: "Diana Miller",
-      status: "To Do" as const,
+      description: "Train customer support team on new processes and tools",
+      status: "to-do" as const,
+      assignee_id: "user-4",
+      assignee_name: "Diana Miller",
+      project_area: "HR & People",
+      due_date: "2025-06-01",
+      week_number: 4,
+      document_link: null,
       progress: 0,
-      dueDate: "2025-06-01"
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-15T00:00:00Z",
+      created_by: "user-1"
     },
     {
-      id: 5,
+      id: "5",
       title: "Product Documentation Update",
-      assignee: "Eva Wilson",
-      status: "Done" as const,
+      description: "Update all product documentation with latest features",
+      status: "done" as const,
+      assignee_id: "user-5",
+      assignee_name: "Eva Wilson",
+      project_area: "Operations & Systems",
+      due_date: "2025-02-28",
+      week_number: 1,
+      document_link: null,
       progress: 100,
-      dueDate: "2025-02-28"
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-15T00:00:00Z",
+      created_by: "user-1"
     }
   ];
 
