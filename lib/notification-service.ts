@@ -8,7 +8,7 @@ export interface CreateNotificationParams {
   message: string;
   relatedDeliverableId?: string;
   relatedUserId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

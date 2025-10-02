@@ -55,7 +55,7 @@ export const getTeamMemberEmailFromDB = async (name: string): Promise<string | n
     
     // Priority: profile email > team_members email > hardcoded Gmail
     // All should be personal Gmail addresses
-    const profile = teamMember.profiles as any;
+    const profile = teamMember.profiles as { email?: string } | null;
     const dbEmail = profile?.email || teamMember.email;
     
     // If database has an email, use it; otherwise use hardcoded mapping

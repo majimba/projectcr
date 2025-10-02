@@ -70,6 +70,17 @@ export async function PUT(request: NextRequest) {
           .in('id', notification_ids)
           .eq('user_id', user.id);
         break;
+
+      default:
+        return NextResponse.json({ 
+          error: 'Invalid action' 
+        }, { status: 400 });
+    }
+
+    if (!query) {
+      return NextResponse.json({ 
+        error: 'Invalid action' 
+      }, { status: 400 });
     }
 
     const { data, error } = await query;

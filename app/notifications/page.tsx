@@ -80,13 +80,13 @@ export default function NotificationsPage() {
     }
   };
 
-  const handleNotificationClick = async (notification: any) => {
+  const handleNotificationClick = async (notification: { id: string; is_read: boolean }) => {
     if (!notification.is_read) {
       await markAsRead(notification.id);
     }
   };
 
-  const handleToggleRead = async (notification: any, e: React.MouseEvent) => {
+  const handleToggleRead = async (notification: { id: string; is_read: boolean }, e: React.MouseEvent) => {
     e.stopPropagation();
     if (notification.is_read) {
       await markAsUnread(notification.id);
@@ -210,13 +210,13 @@ export default function NotificationsPage() {
                             <p className="text-gray-600 dark:text-gray-400 mt-1">
                               {notification.message}
                             </p>
-                            {notification.related_deliverable && (
+                            {notification.related_deliverable_id && (
                               <Link
-                                href={`/task/${notification.related_deliverable.id}`}
+                                href={`/task/${notification.related_deliverable_id}`}
                                 className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mt-2 inline-block"
                                 onClick={(e) => e.stopPropagation()}
                               >
-                                View task: {notification.related_deliverable.title}
+                                View task: {notification.related_deliverable_id}
                               </Link>
                             )}
                           </div>

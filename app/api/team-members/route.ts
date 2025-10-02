@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     // Transform the data to match expected format
     // Prioritize profile data over team_members data when profile exists
     const transformedTeamMembers = teamMembersWithProfiles?.map(member => {
-      const profile = member.profiles as any;
+      const profile = Array.isArray(member.profiles) ? member.profiles[0] : member.profiles as { full_name: string; email: string; avatar_url?: string; phone?: string; bio?: string } | null;
       
       return {
         id: member.id,

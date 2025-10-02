@@ -101,7 +101,7 @@ export default function NotificationDropdown({ isOpen, onClose }: NotificationDr
     }
   };
 
-  const handleNotificationClick = async (notification: any) => {
+  const handleNotificationClick = async (notification: { id: string; is_read: boolean; related_deliverable_id?: string | null }) => {
     // Mark as read if not already read
     if (!notification.is_read) {
       await markAsRead(notification.id);
@@ -210,10 +210,10 @@ export default function NotificationDropdown({ isOpen, onClose }: NotificationDr
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                           {notification.message}
                         </p>
-                        {notification.related_deliverable && (
+                        {notification.related_deliverable_id && (
                           <div className="flex items-center gap-2 mt-1">
                             <p className="text-xs text-gray-500 dark:text-gray-500">
-                              Task: {notification.related_deliverable.title}
+                              Task ID: {notification.related_deliverable_id}
                             </p>
                             <span className="text-xs text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
                               View Task →
