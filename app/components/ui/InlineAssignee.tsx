@@ -71,6 +71,29 @@ const InlineAssignee: React.FC<InlineAssigneeProps> = ({
       });
 
       if (response.ok) {
+        const updatedTask = await response.json();
+        
+        // Send assignment notification if task was assigned to someone
+        if (newAssignee && newAssignee !== 'Unassigned') {
+          try {
+            await fetch('/api/email/send', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                type: 'assignment',
+                taskData: updatedTask,
+                assigneeName: newAssignee
+              })
+            });
+            console.log('Assignment notification sent successfully');
+          } catch (emailError) {
+            console.error('Failed to send assignment notification:', emailError);
+            // Don't fail the assignment if email fails
+          }
+        }
+        
         // Call parent callback to update local state
         onAssigneeChange(taskId, newAssignee);
         setIsOpen(false);

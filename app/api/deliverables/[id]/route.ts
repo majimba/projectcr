@@ -145,6 +145,42 @@ export async function PUT(
         .insert(historyEntries)
     }
 
+    // Send email notifications for task completion
+    if (updateData.status === 'done' && currentDeliverable?.status !== 'done') {
+      try {
+        // Send congratulations to team member
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/email/send`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'congratulations',
+            taskData: data,
+            assigneeName: updateData.assignee_name || 'Unknown'
+          })
+        });
+
+        // Send completion confirmation to company
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/email/send`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 'completion',
+            taskData: data,
+            assigneeName: updateData.assignee_name || 'Unknown'
+          })
+        });
+
+        console.log('Completion notifications sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send completion notifications:', emailError);
+        // Don't fail the update if email fails
+      }
+    }
+
     return NextResponse.json(data, { status: 200 })
   } catch (error) {
     console.error('Unexpected error:', error)

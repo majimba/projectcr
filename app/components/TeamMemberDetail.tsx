@@ -185,3 +185,4 @@ export default function TeamMemberDetail({ member, isOpen, onClose }: TeamMember
 }
 
 
+
