@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 import { UpdateDeliverable } from '@/types/database'
+import { createTaskAssignmentNotification, createTaskCompletionNotification, createTaskStatusChangeNotification } from '@/lib/notification-service'
 
 // GET /api/deliverables/[id] - Fetch a specific deliverable
 export async function GET(
@@ -174,10 +175,59 @@ export async function PUT(
           })
         });
 
+        // Create notification for task completion
+        if (updateData.assignee_name && updateData.assignee_name !== 'Unassigned') {
+          await createTaskCompletionNotification(
+            updateData.assignee_name,
+            data.title,
+            id,
+            data.project_area
+          );
+        }
+
         console.log('Completion notifications sent successfully');
       } catch (emailError) {
         console.error('Failed to send completion notifications:', emailError);
         // Don't fail the update if email fails
+      }
+    }
+
+    // Create notification for task assignment
+    if (updateData.assignee_name !== undefined && 
+        updateData.assignee_name !== currentDeliverable?.assignee_name &&
+        updateData.assignee_name && 
+        updateData.assignee_name !== 'Unassigned') {
+      try {
+        await createTaskAssignmentNotification(
+          updateData.assignee_name,
+          data.title,
+          id,
+          data.project_area,
+          data.due_date
+        );
+        console.log('Task assignment notification created successfully');
+      } catch (notificationError) {
+        console.error('Failed to create assignment notification:', notificationError);
+        // Don't fail the update if notification fails
+      }
+    }
+
+    // Create notification for status change
+    if (updateData.status && updateData.status !== currentDeliverable?.status) {
+      try {
+        if (updateData.assignee_name && updateData.assignee_name !== 'Unassigned') {
+          await createTaskStatusChangeNotification(
+            updateData.assignee_name,
+            data.title,
+            id,
+            currentDeliverable?.status || 'unknown',
+            updateData.status
+          );
+          console.log('Task status change notification created successfully');
+        }
+      } catch (notificationError) {
+        console.error('Failed to create status change notification:', notificationError);
+        // Don't fail the update if notification fails
       }
     }
 

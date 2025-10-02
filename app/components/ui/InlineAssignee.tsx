@@ -87,9 +87,9 @@ const InlineAssignee: React.FC<InlineAssigneeProps> = ({
                 assigneeName: newAssignee
               })
             });
-            console.log('Assignment notification sent successfully');
+            console.log('Assignment email sent successfully');
           } catch (emailError) {
-            console.error('Failed to send assignment notification:', emailError);
+            console.error('Failed to send assignment email:', emailError);
             // Don't fail the assignment if email fails
           }
         }

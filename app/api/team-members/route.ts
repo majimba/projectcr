@@ -5,25 +5,33 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
 
-    // Fetch team members directly from team_members table
-    const { data: teamMembers, error } = await supabase
+    // First, try to fetch team members with profiles (for users who have signed up)
+    const { data: teamMembersWithProfiles, error: profileError } = await supabase
       .from('team_members')
       .select(`
         id,
-        name,
-        email,
+        profile_id,
         role,
         assigned_tasks,
+        is_active,
+        joined_at,
+        name,
+        email,
         bio,
         phone,
-        is_active,
-        joined_at
+        profiles:profile_id (
+          full_name,
+          email,
+          avatar_url,
+          phone,
+          bio
+        )
       `)
       .eq('is_active', true)
       .order('joined_at', { ascending: true });
 
-    if (error) {
-      console.error('Error fetching team members:', error);
+    if (profileError) {
+      console.error('Error fetching team members:', profileError);
       return NextResponse.json(
         { error: 'Failed to fetch team members' },
         { status: 500 }
@@ -31,18 +39,26 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform the data to match expected format
-    const transformedTeamMembers = teamMembers?.map(member => ({
-      id: member.id,
-      name: member.name || 'Unknown',
-      email: member.email || '',
-      role: member.role,
-      tasks: member.assigned_tasks || '',
-      avatar_url: null, // No avatar for now
-      bio: member.bio || '',
-      phone: member.phone || '',
-      is_active: member.is_active,
-      joined_at: member.joined_at
-    })) || [];
+    // Prioritize profile data over team_members data when profile exists
+    const transformedTeamMembers = teamMembersWithProfiles?.map(member => {
+      const profile = member.profiles as any;
+      
+      return {
+        id: member.id,
+        profile_id: member.profile_id,
+        // Use profile data if available, otherwise fall back to team_members data
+        name: profile?.full_name || member.name || 'Unknown',
+        email: profile?.email || member.email || '',
+        role: member.role,
+        tasks: member.assigned_tasks || '',
+        avatar_url: profile?.avatar_url || null,
+        bio: profile?.bio || member.bio || '',
+        phone: profile?.phone || member.phone || '',
+        is_active: member.is_active,
+        joined_at: member.joined_at,
+        has_profile: !!profile // Flag to indicate if user has signed up
+      };
+    }) || [];
 
     return NextResponse.json(transformedTeamMembers);
   } catch (error) {

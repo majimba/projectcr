@@ -1,0 +1,290 @@
+
+> project-cr-app@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/mac/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/mac/Arc Synthesis/luminary_co/project CR/dashboard/project-cr-app/package-lock.json
+
+   ▲ Next.js 15.5.4 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.146:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Compiled middleware in 222ms
+ ✓ Ready in 1541ms
+ ○ Compiling /api/auth/user ...
+ ✓ Compiled /api/auth/user in 1499ms
+ GET /api/auth/user 200 in 2615ms
+ ○ Compiling /profile ...
+ ✓ Compiled /profile in 3s
+ GET /profile 200 in 3257ms
+ ✓ Compiled /favicon.ico in 329ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 613ms
+ GET /profile 200 in 475ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 300ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 747ms
+ ✓ Compiled /api/notifications in 465ms
+ GET /api/auth/user 200 in 1029ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1732ms
+ GET /api/auth/user 200 in 922ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1252ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1383ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1623ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 2688ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1904ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1475ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1771ms
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 1988ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1777ms
+ GET /reports 200 in 2260ms
+ GET /reports 200 in 342ms
+ GET /reports 200 in 144ms
+ GET /reports 200 in 92ms
+ ✓ Compiled /api/deliverables in 253ms
+ GET /api/deliverables 200 in 1224ms
+ ✓ Compiled /api/project-phases in 115ms
+ GET /api/deliverables 200 in 965ms
+ GET /api/project-phases 200 in 1035ms
+ GET /api/project-phases 200 in 1299ms
+ ✓ Compiled /settings in 384ms
+ GET /settings 200 in 462ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1678ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1440ms
+ ✓ Compiled middleware in 8ms
+ GET /settings 200 in 302ms
+ GET /settings 200 in 544ms
+ ✓ Compiled in 292ms
+ ✓ Compiled in 339ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1640ms
+ ✓ Compiled in 416ms
+ ✓ Compiled in 379ms
+ ⚠ Fast Refresh had to perform a full reload when ./Arc Synthesis/luminary_co/project CR/dashboard/project-cr-app/contexts/AuthContext.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /settings 200 in 741ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 2992ms
+ GET /api/auth/user 200 in 3267ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 3462ms
+ GET /api/auth/user 200 in 1134ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1770ms
+ GET /api/auth/user 200 in 1174ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1253ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1423ms
+ GET /reports 200 in 215ms
+ GET /api/deliverables 200 in 949ms
+ GET /api/project-phases 200 in 912ms
+ GET /api/deliverables 200 in 911ms
+ GET /api/project-phases 200 in 880ms
+ GET /settings 200 in 62ms
+ GET /profile 200 in 177ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1448ms
+ ○ Compiling /api/profile ...
+ ✓ Compiled /api/profile in 590ms
+ PUT /api/profile 200 in 1576ms
+ GET /profile 200 in 484ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 255ms
+ GET /api/auth/user 200 in 1278ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1461ms
+ GET /api/auth/user 200 in 965ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1265ms
+ GET /api/auth/user 200 in 918ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1403ms
+ PUT /api/profile 200 in 960ms
+ GET /api/auth/user 200 in 899ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1310ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1309ms
+ PUT /api/profile 200 in 3811ms
+ GET /api/auth/user 200 in 2208ms
+ GET /profile 200 in 154ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 309ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1355ms
+ GET /api/auth/user 200 in 2213ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1394ms
+ GET /api/auth/user 200 in 2218ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1236ms
+ GET /api/auth/user 200 in 2139ms
+ ○ Compiling / ...
+ ✓ Compiled / in 887ms
+ GET / 200 in 957ms
+ ✓ Compiled /api/team-members in 172ms
+ GET /api/team-members 200 in 765ms
+ GET /api/deliverables 200 in 1094ms
+ GET /api/team-members 200 in 670ms
+ GET /api/deliverables 200 in 1073ms
+ ✓ Compiled /team in 367ms
+ GET /team 200 in 427ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1257ms
+ GET /api/team-members 200 in 594ms
+ GET /api/team-members 200 in 566ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1439ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1458ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1451ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1567ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1345ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1507ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1403ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1537ms
+ GET /team 200 in 403ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 523ms
+ GET /api/team-members 200 in 1155ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 2038ms
+ GET /api/auth/user 200 in 2739ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1523ms
+ GET /api/auth/user 200 in 2369ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1432ms
+ GET /api/auth/user 200 in 2331ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1402ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1687ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1571ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1482ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1662ms
+ GET /team 200 in 250ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 624ms
+ GET /api/team-members 200 in 827ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1414ms
+ GET /api/auth/user 200 in 2487ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1440ms
+ GET /api/auth/user 200 in 2418ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1373ms
+ GET /api/auth/user 200 in 2311ms
+ GET /team 200 in 201ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 325ms
+ GET /api/team-members 200 in 1313ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1393ms
+ GET /api/auth/user 200 in 3291ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1593ms
+ GET /api/auth/user 200 in 2251ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1553ms
+ GET /api/auth/user 200 in 2305ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1473ms
+ ✓ Compiled middleware in 268ms
+ ○ Compiling /api/admin/fix-team-emails ...
+ ✓ Compiled /api/admin/fix-team-emails in 1272ms
+ GET /api/admin/fix-team-emails 405 in 1685ms
+ GET /api/admin/fix-team-emails 405 in 249ms
+ GET / 200 in 856ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 311ms
+ GET /api/deliverables 200 in 993ms
+ GET /api/team-members 200 in 868ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1329ms
+ GET /api/auth/user 200 in 2400ms
+ GET /team 200 in 64ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1352ms
+ GET /api/team-members 200 in 634ms
+ GET /api/auth/user 200 in 2628ms
+ GET /api/team-members 200 in 573ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1380ms
+ GET /api/auth/user 200 in 2190ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1370ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1594ms
+ GET /profile 200 in 106ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1694ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1924ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1840ms
+ GET /api/auth/user 200 in 2629ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1377ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1352ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1456ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1505ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1477ms
+ GET /api/auth/user 200 in 2277ms
+ GET /profile 200 in 298ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 320ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1549ms
+ GET /api/auth/user 200 in 2245ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1550ms
+ GET /api/auth/user 200 in 2227ms
+ GET /team 200 in 77ms
+ GET /api/team-members 200 in 1862ms
+ GET /api/team-members 200 in 2345ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1567ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1538ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1551ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 3178ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1475ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1503ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1360ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1366ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1546ms
+ GET /api/auth/user 200 in 2482ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1626ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1420ms
+ ✓ Compiled in 1158ms
+ ✓ Compiled in 239ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1500ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1466ms
+ GET /api/auth/user 200 in 2220ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1905ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1404ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1417ms
+ ○ Compiling /deliverables ...
+ ✓ Compiled /deliverables in 1118ms
+ GET /deliverables 200 in 1264ms
+ GET /api/deliverables 200 in 1095ms
+ GET /api/deliverables 200 in 905ms
+ GET / 200 in 158ms
+ GET /api/deliverables 200 in 930ms
+ GET /api/team-members 200 in 1896ms
+ GET /api/deliverables 200 in 927ms
+ GET /api/team-members 200 in 1933ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1493ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1488ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1466ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1470ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1423ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1571ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1688ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1564ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1426ms
+ GET /api/auth/user 200 in 2238ms
+ GET /deliverables 200 in 90ms
+ GET /api/deliverables 200 in 1065ms
+ GET /api/deliverables 200 in 1070ms
+ GET /api/team-members 200 in 1861ms
+ ○ Compiling /api/deliverables/[id] ...
+ ✓ Compiled /api/deliverables/[id] in 572ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1381ms
+Task assignment notification created successfully
+ PUT /api/deliverables/428536d2-0263-47e3-9f24-48ca76729208 200 in 3981ms
+ ✓ Compiled /api/email/send in 285ms
+Team member not found in database: Chawana Maseka, using fallback
+Assignment email sent to team member: <fae8f7ef-f312-9e96-3f0c-6f1a00d8c395@luminaryco.co>
+Company notification sent: <960bfa0d-bf7a-4f37-bbee-2440dcaf12a6@luminaryco.co>
+ POST /api/email/send 200 in 7053ms
+ GET / 200 in 88ms
+ GET /api/deliverables 200 in 929ms
+ GET /api/team-members 200 in 1869ms
+ GET /api/deliverables 200 in 928ms
+ GET /api/team-members 200 in 1835ms
+ GET / 200 in 389ms
+ GET /favicon.ico?favicon.0b3bf435.ico 200 in 298ms
+ GET /api/deliverables 200 in 1269ms
+ GET /api/team-members 200 in 2250ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 2123ms
+ GET /api/auth/user 200 in 3436ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1280ms
+ GET /api/auth/user 200 in 2865ms
+ GET /deliverables 200 in 74ms
+ GET /api/deliverables 200 in 1143ms
+ GET /api/deliverables 200 in 965ms
+ GET /reports 200 in 162ms
+ GET /api/deliverables 200 in 969ms
+ GET /api/deliverables 200 in 1050ms
+ GET /api/project-phases 200 in 925ms
+ GET /api/project-phases 200 in 976ms
+ GET /team 200 in 154ms
+ GET /api/team-members 200 in 2158ms
+ GET /api/team-members 200 in 1948ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1342ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1452ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1435ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1367ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 1666ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 2344ms
+ GET /api/auth/user 200 in 2994ms
+ GET /api/notifications?limit=50&offset=0&unread_only=false 200 in 2974ms
+[?25h

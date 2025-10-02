@@ -183,6 +183,44 @@ export interface Database {
           changed_by?: string | null
         }
       }
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: 'task_assigned' | 'task_completed' | 'task_status_changed' | 'comment_added' | 'due_date_reminder' | 'task_updated'
+          title: string
+          message: string
+          is_read: boolean
+          related_deliverable_id: string | null
+          related_user_id: string | null
+          metadata: any
+          created_at: string
+          read_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: 'task_assigned' | 'task_completed' | 'task_status_changed' | 'comment_added' | 'due_date_reminder' | 'task_updated'
+          title: string
+          message: string
+          is_read?: boolean
+          related_deliverable_id?: string | null
+          related_user_id?: string | null
+          metadata?: any
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: 'task_assigned' | 'task_completed' | 'task_status_changed' | 'comment_added' | 'due_date_reminder' | 'task_updated'
+          title?: string
+          message?: string
+          is_read?: boolean
+          related_deliverable_id?: string | null
+          related_user_id?: string | null
+          metadata?: any
+          read_at?: string | null
+        }
+      }
     }
   }
 }
@@ -194,6 +232,7 @@ export type ProjectPhase = Database['public']['Tables']['project_phases']['Row']
 export type TeamMember = Database['public']['Tables']['team_members']['Row']
 export type Comment = Database['public']['Tables']['deliverable_comments']['Row']
 export type HistoryEntry = Database['public']['Tables']['deliverable_history']['Row']
+export type Notification = Database['public']['Tables']['notifications']['Row']
 
 // Insert types
 export type NewProfile = Database['public']['Tables']['profiles']['Insert']
@@ -202,6 +241,7 @@ export type NewProjectPhase = Database['public']['Tables']['project_phases']['In
 export type NewTeamMember = Database['public']['Tables']['team_members']['Insert']
 export type NewComment = Database['public']['Tables']['deliverable_comments']['Insert']
 export type NewHistoryEntry = Database['public']['Tables']['deliverable_history']['Insert']
+export type NewNotification = Database['public']['Tables']['notifications']['Insert']
 
 // Update types
 export type UpdateProfile = Database['public']['Tables']['profiles']['Update']
@@ -210,3 +250,4 @@ export type UpdateProjectPhase = Database['public']['Tables']['project_phases'][
 export type UpdateTeamMember = Database['public']['Tables']['team_members']['Update']
 export type UpdateComment = Database['public']['Tables']['deliverable_comments']['Update']
 export type UpdateHistoryEntry = Database['public']['Tables']['deliverable_history']['Update']
+export type UpdateNotification = Database['public']['Tables']['notifications']['Update']

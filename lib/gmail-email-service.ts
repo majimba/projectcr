@@ -12,16 +12,58 @@ const createTransporter = () => {
   });
 };
 
-// Email mapping for team members - ORIGINAL MAPPINGS RESTORED
+// Email mapping for team members - Personal Gmail addresses
+// These are the ACTUAL email addresses used everywhere
+// (The @luminaryco.co addresses don't exist except hello@luminaryco.co)
 const getTeamMemberEmail = (name: string): string => {
   const emailMap: Record<string, string> = {
     'Chawana Masaka': 'chawana.maseka@gmail.com',
+    'Chawana Maseka': 'chawana.maseka@gmail.com', // Alternative spelling
     'Maynard Muchangwe': 'maynarjfilms@gmail.com',
     'Emmanuel Kapili': 'risendream@gmail.com',
     'Munsanje Hachamba': 'pandazm76@gmail.com',
     'Delphine Mwape': 'delphinemwape2@gmail.com',
   };
   return emailMap[name] || '';
+};
+
+// Enhanced function to get email from database (to be used in async contexts)
+// This checks the database but always uses personal Gmail addresses
+export const getTeamMemberEmailFromDB = async (name: string): Promise<string | null> => {
+  try {
+    // Import dynamically to avoid circular dependencies
+    const { createClient } = await import('@/lib/supabase-server');
+    const supabase = await createClient();
+    
+    // Try to find team member by name
+    const { data: teamMember, error } = await supabase
+      .from('team_members')
+      .select(`
+        email,
+        profiles:profile_id (
+          email
+        )
+      `)
+      .or(`name.eq.${name},profiles.full_name.eq.${name}`)
+      .eq('is_active', true)
+      .single();
+    
+    if (error || !teamMember) {
+      console.warn(`Team member not found in database: ${name}, using fallback`);
+      return getTeamMemberEmail(name);
+    }
+    
+    // Priority: profile email > team_members email > hardcoded Gmail
+    // All should be personal Gmail addresses
+    const profile = teamMember.profiles as any;
+    const dbEmail = profile?.email || teamMember.email;
+    
+    // If database has an email, use it; otherwise use hardcoded mapping
+    return dbEmail || getTeamMemberEmail(name);
+  } catch (error) {
+    console.error('Error fetching team member email from DB:', error);
+    return getTeamMemberEmail(name);
+  }
 };
 
 // Email templates (same as before)
@@ -243,7 +285,8 @@ export const emailTemplates = {
 
 // Email sending functions using Gmail SMTP
 export const sendTaskAssignmentEmail = async (taskData: Deliverable, assigneeName: string) => {
-  const recipientEmail = getTeamMemberEmail(assigneeName);
+  // Try to get email from database first, fall back to static mapping
+  const recipientEmail = await getTeamMemberEmailFromDB(assigneeName);
   if (!recipientEmail) {
     console.warn(`No email found for team member: ${assigneeName}`);
     return { success: false, error: 'No email found for team member' };
@@ -288,7 +331,8 @@ export const sendTaskAssignmentEmail = async (taskData: Deliverable, assigneeNam
 };
 
 export const sendCongratulationsEmail = async (taskData: Deliverable, assigneeName: string) => {
-  const recipientEmail = getTeamMemberEmail(assigneeName);
+  // Try to get email from database first, fall back to static mapping
+  const recipientEmail = await getTeamMemberEmailFromDB(assigneeName);
   if (!recipientEmail) {
     console.warn(`No email found for team member: ${assigneeName}`);
     return { success: false, error: 'No email found for team member' };
