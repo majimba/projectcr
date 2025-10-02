@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Sidebar from '../components/layout/Sidebar';
 import TopBar from '../components/layout/TopBar';
 import Button from '../components/ui/Button';
@@ -139,9 +140,11 @@ export default function TeamPage() {
                               <div className="flex items-center">
                                 <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mr-3">
                                   {member.avatar_url ? (
-                                    <img
+                                    <Image
                                       src={member.avatar_url}
                                       alt={member.name}
+                                      width={40}
+                                      height={40}
                                       className="w-10 h-10 rounded-full object-cover"
                                     />
                                   ) : (

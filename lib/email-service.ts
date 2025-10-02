@@ -4,7 +4,7 @@ import { Deliverable } from '@/types/database';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email mapping for team members - TEMPORARILY SENDING TO VERIFIED EMAIL
-const getTeamMemberEmail = (name: string): string => {
+const getTeamMemberEmail = (): string => {
   // For now, send all emails to the verified email address due to Resend limitations
   // TODO: Verify domain at resend.com/domains to enable individual team member emails
   return 'hello@luminaryco.co';
@@ -168,7 +168,7 @@ export const emailTemplates = {
 
 // Email sending functions
 export const sendTaskAssignmentEmail = async (taskData: Deliverable, assigneeName: string) => {
-  const recipientEmail = getTeamMemberEmail(assigneeName);
+  const recipientEmail = getTeamMemberEmail();
   if (!recipientEmail) {
     console.warn(`No email found for team member: ${assigneeName}`);
     return { success: false, error: 'No email found for team member' };
@@ -197,7 +197,7 @@ export const sendTaskAssignmentEmail = async (taskData: Deliverable, assigneeNam
 };
 
 export const sendCongratulationsEmail = async (taskData: Deliverable, assigneeName: string) => {
-  const recipientEmail = getTeamMemberEmail(assigneeName);
+  const recipientEmail = getTeamMemberEmail();
   if (!recipientEmail) {
     console.warn(`No email found for team member: ${assigneeName}`);
     return { success: false, error: 'No email found for team member' };

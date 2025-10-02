@@ -48,7 +48,7 @@ export default function DeliverablesPage() {
           try {
             const errorData = await response.json();
             console.error('Error details:', errorData);
-          } catch (e) {
+          } catch {
             console.error('Could not parse error response');
           }
           setDeliverables([]);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import Sidebar from '../components/layout/Sidebar';
 import TopBar from '../components/layout/TopBar';
 import Button from '../components/ui/Button';
@@ -126,9 +127,11 @@ export default function ProfilePage() {
                     {/* Profile Picture Display */}
                     <div className="relative">
                       {profileImage ? (
-                        <img 
+                        <Image 
                           src={profileImage} 
                           alt="Profile" 
+                          width={96}
+                          height={96}
                           className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
                         />
                       ) : (

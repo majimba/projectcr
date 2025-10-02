@@ -141,7 +141,7 @@ const ProjectProgressStatusBar: React.FC<ProjectProgressStatusBarProps> = ({
       {/* Progress Bar Visualization */}
       <div className="mb-4">
         <div className="flex h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          {progressSegments.map((segment, index) => (
+          {progressSegments.map((segment) => (
             segment.count > 0 && (
               <div
                 key={segment.status}

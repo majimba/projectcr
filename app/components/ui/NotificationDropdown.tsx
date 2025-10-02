@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNotifications } from '@/contexts/NotificationsContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
@@ -19,15 +19,13 @@ export default function NotificationDropdown({ isOpen, onClose }: NotificationDr
     error,
     markAsRead, 
     markAllAsRead, 
-    deleteNotification,
-    refreshNotifications 
+    deleteNotification
   } = useNotifications();
   
   const { user } = useAuth();
   const router = useRouter();
   
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

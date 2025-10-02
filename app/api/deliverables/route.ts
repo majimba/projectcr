@@ -1,9 +1,9 @@
 import { createClient } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
-import { NewDeliverable, UpdateDeliverable } from '@/types/database'
+import { NewDeliverable } from '@/types/database'
 
 // GET /api/deliverables - Fetch all deliverables
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createClient()
     

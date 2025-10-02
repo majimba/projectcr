@@ -83,7 +83,7 @@ export async function PUT(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const { data, error } = await query;
+    const { error } = await query;
 
     if (error) {
       console.error(`Error performing batch ${action}:`, error);

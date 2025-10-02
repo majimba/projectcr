@@ -75,9 +75,11 @@ export default function TopBar() {
             className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
           >
             {profile?.avatar_url ? (
-              <img
+              <Image
                 src={profile.avatar_url}
                 alt={profile.full_name || 'User'}
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
               />
             ) : (
@@ -96,9 +98,11 @@ export default function TopBar() {
               <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-3 mb-2">
                   {profile?.avatar_url ? (
-                    <img
+                    <Image
                       src={profile.avatar_url}
                       alt={profile.full_name || 'User'}
+                      width={40}
+                      height={40}
                       className="w-10 h-10 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
                     />
                   ) : (

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import React from 'react';
+import Image from 'next/image';
 import Button from './ui/Button';
 
 interface TeamMember {
@@ -34,9 +35,11 @@ export default function TeamMemberDetail({ member, isOpen, onClose }: TeamMember
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                 {member.avatar_url ? (
-                  <img
+                  <Image
                     src={member.avatar_url}
                     alt={member.name}
+                    width={64}
+                    height={64}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                 ) : (
